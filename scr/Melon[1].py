@@ -21,7 +21,7 @@ global html
 global soup
 global cnt
 ################################################################
-chromedriver = '.\exe\chromedriver.exe'
+chromedriver = '..\exe\chromedriver.exe'
 pagebarnum = 2
 playlistnum = 1
 cnt = 1
@@ -58,14 +58,30 @@ def nextpage(nowpagenum):
         pagebarnum += 1
         playlistnum += 1
 
-    
+def webcrolling():
+    global soup
+    nowpage = soup.select('#pageObjNavgation > div > span > strong')
+    print(nowpage)
+    html = driver.page_source
+    soup = bs(html, 'html.parser')
+    titles = soup.select('#pageList > table > tbody > tr > td > div > div > dl > dt > a')
+    for title in titles:
+        txt =str (title)
+        pnum = txt[txt.find('Detail')+20:txt.find('title')-6]
+        fout.write(pnum)
+        fout.write('\n')
+
 ################################################################
 
 driver = webdriver.Chrome(chromedriver)
 extracts = re.compile('[^ 가-힣|a-z|A-Z|0-9|\[|\]|(|)|-|~|?|!|.|,|:|;|%]+')
-fout = open('.\cvs\melon_play_list.csv', 'w', encoding='utf8')
+fout = open('..\cvs\melon_play_list.csv', 'w', encoding='utf8')
 headers = { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit 537.36 (KHTML, like Gecko) Chrome", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"}
 
 loadmelonpage()
 while playlistnum > cnt:
+    webcrolling()
     nextpage(pagebarnum)
+
+    
+fout.close() 
