@@ -3,7 +3,7 @@
 
 # 작성자 : 강민성
 # 작성일 : 2020.09.14
-# 최종 수정일 : 2020.09.15
+# 최종 수정일 : 2020.09.19
 ###############################################################
 
 import requests
@@ -28,6 +28,8 @@ cnt = 1
 ################################################################
 
 def loadmelonpage():
+    global soup
+    global cnt
     driver.get('https://www.melon.com/mymusic/playlist/mymusicplaylist_list.htm?memberKey=3797669')
     assert "python" not in driver.title
     print (driver.title)
@@ -66,9 +68,13 @@ def webcrolling():
     soup = bs(html, 'html.parser')
     titles = soup.select('#pageList > table > tbody > tr > td > div > div > dl > dt > a')
     for title in titles:
-        txt =str (title)
+        txt =str(title)
         pnum = txt[txt.find('Detail')+20:txt.find('title')-6]
         fout.write(pnum)
+        fout.write(", ")
+        plname = txt[txt.find('">')+2:txt.find('<\a>')-3]
+        fout.write(plname)
+        
         fout.write('\n')
 
 ################################################################
@@ -78,10 +84,16 @@ extracts = re.compile('[^ 가-힣|a-z|A-Z|0-9|\[|\]|(|)|-|~|?|!|.|,|:|;|%]+')
 fout = open('..\cvs\melon_play_list.csv', 'w', encoding='utf8')
 headers = { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit 537.36 (KHTML, like Gecko) Chrome", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"}
 
+fout.write('"code"')   
+fout.write(', ')
+fout.write('"playlistname"')
+fout.write('\n')
+
 loadmelonpage()
-while playlistnum > cnt:
+while playlistnum <= cnt:
     webcrolling()
     nextpage(pagebarnum)
 
-    
+print("End Of Program")    
 fout.close() 
+driver.close()
