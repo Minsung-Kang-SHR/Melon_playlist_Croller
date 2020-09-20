@@ -5,7 +5,7 @@
 # 작성일 : 2020.09.14
 # 최종 수정일 : 2020.09.19
 ###############################################################
-
+#####################     Import     ##########################
 import requests
 from bs4 import BeautifulSoup as bs
 import re
@@ -14,18 +14,20 @@ import sys
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
-################################################################
+#####################     Global     ##########################
 global pagebarnum
 global playlistnum
 global html
 global soup
 global cnt
-################################################################
+
+#####################     Var     ##########################
 chromedriver = '..\exe\chromedriver.exe'
 pagebarnum = 2
 playlistnum = 1
 cnt = 1
-################################################################
+
+#####################     Func     ##########################
 
 def loadmelonpage():
     global soup
@@ -69,7 +71,7 @@ def webcrolling():
     titles = soup.select('#pageList > table > tbody > tr > td > div > div > dl > dt > a')
     for title in titles:
         txt =str(title)
-        pnum = txt[txt.find('Detail')+20:txt.find('title')-6]
+        pnum = txt[txt.find('Detail')+20:txt.find('title')-5]
         fout.write(pnum)
         fout.write(", ")
         plname = txt[txt.find('">')+2:txt.find('<\a>')-3]
@@ -77,18 +79,18 @@ def webcrolling():
         
         fout.write('\n')
 
-################################################################
+#####################     Main     ##########################
 
 driver = webdriver.Chrome(chromedriver)
 extracts = re.compile('[^ 가-힣|a-z|A-Z|0-9|\[|\]|(|)|-|~|?|!|.|,|:|;|%]+')
 fout = open('..\cvs\melon_play_list.csv', 'w', encoding='utf8')
 headers = { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit 537.36 (KHTML, like Gecko) Chrome", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"}
-
+"""
 fout.write('"code"')   
 fout.write(', ')
 fout.write('"playlistname"')
 fout.write('\n')
-
+"""
 loadmelonpage()
 while playlistnum <= cnt:
     webcrolling()
