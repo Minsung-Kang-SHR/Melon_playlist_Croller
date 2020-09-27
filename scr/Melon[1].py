@@ -83,7 +83,7 @@ def webcrolling():
 
 driver = webdriver.Chrome(chromedriver)
 extracts = re.compile('[^ 가-힣|a-z|A-Z|0-9|\[|\]|(|)|-|~|?|!|.|,|:|;|%]+')
-fout = open('..\cvs\melon_play_list.csv', 'w', encoding='utf8')
+fout = open('..\csv\melon[1]_csv\melon_play_list.csv', 'w', encoding='utf8')
 headers = { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit 537.36 (KHTML, like Gecko) Chrome", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"}
 """
 fout.write('"code"')   
